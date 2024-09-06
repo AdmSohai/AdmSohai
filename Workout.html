@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phone Optimized Tabata Timer</title>
+  <link rel="stylesheet" href="./style.css" />
+  <script src="./timer.js"></script>
+  <script src="./exercises.js"></script>
+</head>
+
+<body id="tabataBody">
+
+  <div class="upper-half">
+    <div class="buttons-container">
+      <button id="btn1">1</button>
+      <button id="btn2">2</button>
+      <button id="btn3">3</button>
+      <button id="btn4">4</button>
+      <button id="btn5">5</button>
+      <button id="btn6">G</button>
+    </div>
+
+    <!-- Active/Rest text -->
+    <div id="phaseText" class="center-text">Preparation Phase</div>
+
+    <!-- Timer -->
+    <div class="timer" id="timer">00:10</div>
+
+    <!-- Start/Stop and Reset buttons -->
+    <div class="control-buttons">
+      <button id="startStopBtn">Start</button>
+      <button id="resetBtn">Reset</button>
+    </div>
+
+    <!-- Set, Next, and Exercise text at the bottom -->
+    <div><br></div>
+    <div id="exerciseInfo">
+      <div id="setText">Set: 0</div>
+      <div id="currentExerciseText">Exercise: None</div>
+      <div id="nextText">Next: Push-Ups</div>
+    </div>
+  </div>
+
+  <div class="bottom-half" id="workoutText">
+    <p>This is centralized text in the bottom half</p>
+  </div>
+
+  <script>
+    let timer = document.getElementById('timer');
+    let startStopBtn = document.getElementById('startStopBtn');
+    let resetBtn = document.getElementById('resetBtn');
+    let phaseText = document.getElementById('phaseText'); // For Active/Rest/Preparation phase
+    let setText = document.getElementById('setText');
+    let nextText = document.getElementById('nextText');
+    let currentExerciseText = document.getElementById('currentExerciseText');
+    let tabataBody = document.getElementById('tabataBody'); // Get the body element
+
+    let interval = null;
+    let running = false;
+    let timeLeft = 10;  // Initial 10 seconds for preparation phase
+    let currentSet = 0;  // Tracks the current set (1 to 8)
+    let inLongPhase = false;  // Tracks whether we are in the 20s or 10s phase
+    const totalSets = 8;  // Total number of sets (1 to 8)
+
+    const exercises = [
+      "Push-Ups",
+      "Tricep Dips",
+      "Plank",
+      "Flutter Kicks",
+      "Bodyweight Squats",
+      "Lunge Jumps",
+      "Crunches",
+      "Knee Push-Ups"
+    ];
+
+    // Update the displayed timer
+    function updateTimer() {
+      let secs = timeLeft.toString().padStart(2, '0');
+      timer.textContent = `00:${secs}`;
+    }
+
+    // Start/stop the timer
+    startStopBtn.addEventListener('click', function () {
+      if (running) {
+        clearInterval(interval);
+        startStopBtn.textContent = 'Start';
+      } else {
+        startTimer();
+        startStopBtn.textContent = 'Stop';
+      }
+      running = !running;
+    });
+
+    // Start the countdown timer
+    function startTimer() {
+      interval = setInterval(function () {
+        updateTimer();
+        
+        if (timeLeft === 0) {
+          clearInterval(interval);
+
+          if (currentSet === 0) {
+            // After the initial 10s preparation, start the first set
+            currentSet++;
+            timeLeft = 20;  // Start with 20s for the first phase
+            inLongPhase = true;
+            tabataBody.style.backgroundColor = 'red';  // Red for 20-second phase
+            phaseText.textContent = `ACTIVE`;  // Show Active text
+            setText.textContent = `Set: ${currentSet}`;
+            nextText.textContent = `Next: ${exercises[currentSet] || "None"}`;
+            currentExerciseText.textContent = `Exercise: ${exercises[currentSet - 1]}`;
+            startTimer();
+          } else if (inLongPhase) {
+            // Switch to the 10s phase after 20s
+            timeLeft = 10;
+            inLongPhase = false;
+            tabataBody.style.backgroundColor = 'green';  // Green for 10-second phase
+            phaseText.textContent = `REST`;  // Show Rest text
+            nextText.textContent = `Next: ${exercises[currentSet] || "None"}`;
+            startTimer();
+          } else {
+            // After 10s phase, move to the next set
+            currentSet++;
+            if (currentSet > totalSets) {
+              resetTimer();
+            } else {
+              timeLeft = 20;  // Start with 20s for the new set
+              inLongPhase = true;
+              tabataBody.style.backgroundColor = 'red';  // Red for 20-second phase
+              phaseText.textContent = `ACTIVE`;  // Show Active text
+              setText.textContent = `Set: ${currentSet}`;
+              nextText.textContent = `Next: ${exercises[currentSet] || "None"}`;
+              currentExerciseText.textContent = `Exercise: ${exercises[currentSet - 1]}`;
+              startTimer();
+            }
+          }
+        }
+
+        timeLeft--;
+      }, 1000);
+    }
+
+    // Reset the timer
+    resetBtn.addEventListener('click', function () {
+      resetTimer();
+    });
+
+    function resetTimer() {
+      clearInterval(interval);
+      running = false;
+      timeLeft = 10;
+      currentSet = 0;
+      inLongPhase = false;
+      updateTimer();
+      phaseText.textContent = `Preparation Phase`;
+      setText.textContent = `Set: 0`;
+      nextText.textContent = `Next: ${exercises[0]}`;
+      currentExerciseText.textContent = `Exercise: None`;
+      startStopBtn.textContent = 'Start';
+      tabataBody.style.backgroundColor = 'lightblue';  // Light blue for preparation
+    }
+
+    window.onload = () => {
+      updateTimer();
+      resetTimer();
+      loadExcercises();
+    }
+  </script>
+
+</body>
+
+</html>
