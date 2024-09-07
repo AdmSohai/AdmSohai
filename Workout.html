@@ -23,7 +23,7 @@
     </div>
 
     <!-- Active/Rest text -->
-    <div id="phaseText" class="center-text">Preparation</div>
+    <div id="phaseText" class="center-text">Preparation Phase</div>
 
     <!-- Timer -->
     <div class="timer" id="timer">00:10</div>
@@ -51,18 +51,21 @@
     let timer = document.getElementById('timer');
     let startStopBtn = document.getElementById('startStopBtn');
     let resetBtn = document.getElementById('resetBtn');
-    let phaseText = document.getElementById('phaseText'); // For Active/Rest/Preparation phase
+    let phaseText = document.getElementById('phaseText');
     let setText = document.getElementById('setText');
     let nextText = document.getElementById('nextText');
     let currentExerciseText = document.getElementById('currentExerciseText');
-    let tabataBody = document.getElementById('tabataBody'); // Get the body element
+    let tabataBody = document.getElementById('tabataBody');
 
     let interval = null;
     let running = false;
-    let timeLeft = 10;  // Initial 10 seconds for preparation phase
-    let currentSet = 0;  // Tracks the current set (1 to 8)
-    let inLongPhase = false;  // Tracks whether we are in the 20s or 10s phase
-    const totalSets = 8;  // Total number of sets (1 to 8)
+    let timeLeft = 10;
+    let currentSet = 0;
+    let currentLoop = 1;
+    let totalLoops = 3;
+    let inLongPhase = false;
+    const totalSets = 8;
+    const longRestDuration = 50;
 
     const exercises = [
       "Push-Ups",
@@ -75,13 +78,11 @@
       "Knee Push-Ups"
     ];
 
-    // Update the displayed timer
     function updateTimer() {
       let secs = timeLeft.toString().padStart(2, '0');
       timer.textContent = `00:${secs}`;
     }
 
-    // Start/stop the timer
     startStopBtn.addEventListener('click', function () {
       if (running) {
         clearInterval(interval);
@@ -93,7 +94,6 @@
       running = !running;
     });
 
-    // Start the countdown timer
     function startTimer() {
       interval = setInterval(function () {
         updateTimer();
@@ -102,35 +102,36 @@
           clearInterval(interval);
 
           if (currentSet === 0) {
-            // After the initial 10s preparation, start the first set
             currentSet++;
-            timeLeft = 20;  // Start with 20s for the first phase
+            timeLeft = 20;
             inLongPhase = true;
-            tabataBody.style.backgroundColor = 'red';  // Red for 20-second phase
-            phaseText.textContent = `ACTIVE`;  // Show Active text
-            setText.textContent = `Set: ${currentSet}`;
+            tabataBody.style.backgroundColor = 'lightpink';
+            phaseText.textContent = `ACTIVE`;
+            setText.textContent = `Loop: ${currentLoop}, Set: ${currentSet} of 8`;
             nextText.textContent = `Next: ${exercises[currentSet] || "None"}`;
             currentExerciseText.textContent = `Exercise: ${exercises[currentSet - 1]}`;
             startTimer();
           } else if (inLongPhase) {
-            // Switch to the 10s phase after 20s
             timeLeft = 10;
             inLongPhase = false;
-            tabataBody.style.backgroundColor = 'green';  // Green for 10-second phase
-            phaseText.textContent = `REST`;  // Show Rest text
+            tabataBody.style.backgroundColor = 'lightgreen';
+            phaseText.textContent = `REST`;
             nextText.textContent = `Next: ${exercises[currentSet] || "None"}`;
             startTimer();
           } else {
-            // After 10s phase, move to the next set
             currentSet++;
             if (currentSet > totalSets) {
-              resetTimer();
+              if (currentLoop < totalLoops) {
+                startRestPeriod();
+              } else {
+                resetTimer();
+              }
             } else {
-              timeLeft = 20;  // Start with 20s for the new set
+              timeLeft = 20;
               inLongPhase = true;
-              tabataBody.style.backgroundColor = 'red';  // Red for 20-second phase
-              phaseText.textContent = `ACTIVE`;  // Show Active text
-              setText.textContent = `Set: ${currentSet}`;
+              tabataBody.style.backgroundColor = 'lightpink';
+              phaseText.textContent = `ACTIVE`;
+              setText.textContent = `Loop: ${currentLoop}, Set: ${currentSet} of 8`;
               nextText.textContent = `Next: ${exercises[currentSet] || "None"}`;
               currentExerciseText.textContent = `Exercise: ${exercises[currentSet - 1]}`;
               startTimer();
@@ -142,7 +143,35 @@
       }, 1000);
     }
 
-    // Reset the timer
+    function startRestPeriod() {
+      timeLeft = longRestDuration;
+      tabataBody.style.backgroundColor = 'lightblue';
+      phaseText.textContent = `LONG REST`;
+      setText.textContent = `Loop: ${currentLoop} Complete`;
+      currentExerciseText.textContent = `Exercise: Rest`;
+      nextText.textContent = `Next: ${exercises[0]}`;
+
+      interval = setInterval(function () {
+        updateTimer();
+
+        if (timeLeft === 0) {
+          clearInterval(interval);
+          currentSet = 1;
+          currentLoop++;
+          timeLeft = 20;
+          inLongPhase = true;
+          tabataBody.style.backgroundColor = 'lightpink';
+          phaseText.textContent = `ACTIVE`;
+          setText.textContent = `Loop: ${currentLoop}, Set: ${currentSet} of 8`;
+          nextText.textContent = `Next: ${exercises[currentSet] || "None"}`;
+          currentExerciseText.textContent = `Exercise: ${exercises[currentSet - 1]}`;
+          startTimer();
+        }
+
+        timeLeft--;
+      }, 1000);
+    }
+
     resetBtn.addEventListener('click', function () {
       resetTimer();
     });
@@ -152,14 +181,15 @@
       running = false;
       timeLeft = 10;
       currentSet = 0;
+      currentLoop = 1;
       inLongPhase = false;
       updateTimer();
-      phaseText.textContent = `Preparation`;
-      setText.textContent = `Set: 0`;
+      phaseText.textContent = `Preparation Phase`;
+      setText.textContent = `Loop 1, Set: 0 of 8`;
       nextText.textContent = `Next: ${exercises[0]}`;
       currentExerciseText.textContent = `Exercise: None`;
       startStopBtn.textContent = 'Start';
-      tabataBody.style.backgroundColor = 'lightblue';  // Light blue for preparation
+      tabataBody.style.backgroundColor = 'lightblue';
     }
 
     window.onload = () => {
