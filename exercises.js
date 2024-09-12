@@ -9,10 +9,9 @@ function loadExcercises(){
               <li>Push-Ups</li>
               <li>Pike Push-Ups</li>
               <li>Tricep Dips</li>
-              <li>Side Lunges</li>
               <li>Jump Pull-Ups</li>
               <li>Planks</li>
-              <li>Bicycle Kicks</li>
+              <li>Diamond Push-Ups</li>
             </ul>
             <li>Cool Down: Stretching for lower body.</li>
           </ul>
@@ -53,9 +52,9 @@ function loadExcercises(){
               <li>Bicycle Kicks</li>
               <li>Flutter Kicks</li>
               <li>Leg Raises</li>
-              <li>Knee to Chest</li>
               <li>Crunches</li>
-              <li>Knee Touches</li>
+              <li>Push-Ups</li>
+              <li>Mountain Climbers</li>
             </ul>
             <li>Cool Down: Stretching for upper body and core.</li>
           </ul>
@@ -95,8 +94,6 @@ function loadExcercises(){
               <li>Calf Raises</li>
               <li>Side Lunges</li>
               <li>Reverse Lunges</li>
-              <li>Jumping Jacks</li>
-              <li>Skipping (100)</li>
               <li>Bicycle Kicks</li>
             </ul>
             <li>Cool Down: Stretching for lower body.</li>
