@@ -31,9 +31,9 @@ function loadExcercises(){
               <li>Plank</li>
               <li>Flutter Kicks</li>
               <li>Bodyweight Squats</li>
-              <li>Lunge Jumps</li>
+              <li>Lunges</li>
               <li>Crunches</li>
-              <li>Knee Push-Ups</li>
+              <li>Bicycle Kicks</li>
             </ul>
             <li>Cool Down: Stretching for upper body and core.</li>
           </ul>
@@ -74,9 +74,9 @@ function loadExcercises(){
               <li>Plank</li>
               <li>Flutter Kicks</li>
               <li>Bodyweight Squats</li>
-              <li>Lunge Jumps</li>
+              <li>Lunges</li>
               <li>Crunches</li>
-              <li>Knee Push-Ups</li>
+              <li>Bicycle Kicks</li>
             </ul>
             <li>Cool Down: Stretching for upper body and core.</li>
         `;
