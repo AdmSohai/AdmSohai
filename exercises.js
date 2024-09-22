@@ -51,9 +51,9 @@ function loadExcercises(){
               <li>Regular Plank</li>
               <li>Bicycle Kicks</li>
               <li>Flutter Kicks</li>
-              <li>Leg Raises</li>
               <li>Crunches</li>
-              <li>Push-Ups</li>
+              <li>Bird-Dog</li>
+              <li>Dead-Bug</li>
               <li>Mountain Climbers</li>
             </ul>
             <li>Cool Down: Stretching for upper body and core.</li>
@@ -92,7 +92,7 @@ function loadExcercises(){
               <li>Wall Sits (hold for 30-60 seconds)</li>
               <li>Bodyweight Squats</li>
               <li>Calf Raises</li>
-              <li>Side Lunges</li>
+              <li>Forward Lunges</li>
               <li>Reverse Lunges</li>
               <li>Bicycle Kicks</li>
             </ul>
