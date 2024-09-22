@@ -33,7 +33,7 @@ function loadExcercises(){
               <li>Bodyweight Squats</li>
               <li>Lunges</li>
               <li>Crunches</li>
-              <li>Bicycle Kicks</li>
+              <li>Dead-Bug</li>
             </ul>
             <li>Cool Down: Stretching for upper body and core.</li>
           </ul>
@@ -76,7 +76,7 @@ function loadExcercises(){
               <li>Bodyweight Squats</li>
               <li>Lunges</li>
               <li>Crunches</li>
-              <li>Bicycle Kicks</li>
+              <li>Dead-Bug</li>
             </ul>
             <li>Cool Down: Stretching for upper body and core.</li>
         `;
