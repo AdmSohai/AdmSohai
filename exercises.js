@@ -112,8 +112,8 @@ function loadExcercises(){
               <li>Seated Rows</li>
               <li>Shoulder Press</li>
               <li>Chest Press</li>
-              <li>Bicep Curls</li>
-              <li>Tricep Curls</li>
+              <li>Bicep Curls (7-7-7)</li>
+              <li>Tricep Curls / Raises</li>
               <li>Lateral Raises</li>
               <li>Forearm Curls</li>
             </ul>
