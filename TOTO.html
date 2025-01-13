@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remaining Numbers</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        input[type="text"] {
+            padding: 5px;
+            font-size: 16px;
+        }
+        .output {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .grid-item {
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            color: black;
+        }
+        .crossed-out {
+            color: lightgray;
+        }
+        .remaining {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Find Remaining Numbers</h1>
+    <p>Enter numbers one by one, ranges (e.g., "7-10"),<br>or comma-separated values (e.g., "7,8,9").<br><br>Type "end" to finish and see the remaining numbers.</p>
+
+    <div>
+        <input type="text" id="numberInput" placeholder="Enter a number, range, or 'end'" onkeypress="handleKeyPress(event)">
+    </div>
+
+    <div class="output" id="output"></div>
+
+    <div class="grid" id="numberGrid"></div>
+
+    <script>
+        const fullRange = new Set(Array.from({length: 49}, (_, i) => i + 1));
+        const crossedOutNumbers = new Set();
+
+        function handleKeyPress(event) {
+            if (event.key === "Enter") {
+                submitInput();
+            }
+        }
+
+        function submitInput() {
+            const inputElement = document.getElementById("numberInput");
+            const outputElement = document.getElementById("output");
+            const userInput = inputElement.value.trim();
+
+            if (userInput.toLowerCase() === "end") {
+                const remainingNumbers = Array.from(fullRange).filter(num => !crossedOutNumbers.has(num));
+                outputElement.textContent = `Remaining numbers: [${remainingNumbers.join(", ")}]`;
+                highlightRemainingNumbers(remainingNumbers);
+                inputElement.value = "";
+                return;
+            }
+
+            const rangesAndNumbers = userInput.split(",").map(item => item.trim());
+            let validInput = true;
+
+            rangesAndNumbers.forEach(entry => {
+                if (entry.includes("-")) {
+                    const [start, end] = entry.split("-").map(num => parseInt(num, 10));
+                    if (!isNaN(start) && !isNaN(end) && start >= 1 && end <= 49 && start <= end) {
+                        for (let i = start; i <= end; i++) {
+                            crossedOutNumbers.add(i);
+                        }
+                    } else {
+                        validInput = false;
+                    }
+                } else if (!isNaN(entry)) {
+                    const number = parseInt(entry, 10);
+                    if (number >= 1 && number <= 49) {
+                        crossedOutNumbers.add(number);
+                    } else {
+                        validInput = false;
+                    }
+                } else {
+                    validInput = false;
+                }
+            });
+
+            if (validInput) {
+                outputElement.textContent = `Numbers crossed out. Keep going or type 'end' to finish.`;
+                updateGrid();
+            } else {
+                outputElement.textContent = "Invalid input. Please enter valid numbers, ranges (e.g., '7-10'), or 'end'.";
+            }
+
+            inputElement.value = "";
+            inputElement.focus();
+        }
+
+        function updateGrid() {
+            const gridElement = document.getElementById("numberGrid");
+            gridElement.innerHTML = "";
+            for (let i = 1; i <= 49; i++) {
+                const gridItem = document.createElement("div");
+                gridItem.textContent = i;
+                gridItem.className = "grid-item";
+                if (crossedOutNumbers.has(i)) {
+                    gridItem.classList.add("crossed-out");
+                }
+                gridElement.appendChild(gridItem);
+            }
+        }
+
+        function highlightRemainingNumbers(remainingNumbers) {
+            const gridElement = document.getElementById("numberGrid");
+            gridElement.innerHTML = "";
+            for (let i = 1; i <= 49; i++) {
+                const gridItem = document.createElement("div");
+                gridItem.textContent = i;
+                gridItem.className = "grid-item";
+                if (remainingNumbers.includes(i)) {
+                    gridItem.classList.add("remaining");
+                } else {
+                    gridItem.classList.add("crossed-out");
+                }
+                gridElement.appendChild(gridItem);
+            }
+        }
+
+        // Initialize the grid
+        updateGrid();
+    </script>
+</body>
+</html>
